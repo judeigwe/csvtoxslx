@@ -42,8 +42,8 @@ jobs:
 
       - name: Commit and Push XLSX to Repo
         run: |
-          git config --system user.email "igwejude@github.com"
-          git config --system user.name "Jude Igwe"
+          git config --global user.email "igwejude@github.com"
+          git config --global user.name "Jude Igwe"
           git pull
           git add data.xlsx
           git commit -m "Add converted XLSX file"
