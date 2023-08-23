@@ -1,7 +1,9 @@
 name: Convert CSV to XLSX and Push
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main 
 
 jobs:
   convert_and_push:
