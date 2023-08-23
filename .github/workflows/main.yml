@@ -1,0 +1,49 @@
+name: Convert CSV to XLSX and Push
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  convert_and_push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.x
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas openpyxl
+
+      - name: Create and Convert CSV to XLSX
+        run: |
+          echo "Header1,Header2,Header3" > data.csv
+          echo "Value1,Value2,Value3" >> data.csv
+          echo "Value4,Value5,Value6" >> data.csv
+          python - << EOF
+          import pandas as pd
+
+          # Read CSV file
+          csv_file = 'data.csv'
+          data = pd.read_csv(csv_file)
+
+          # Convert to XLSX
+          xlsx_file = 'data.xlsx'
+          data.to_excel(xlsx_file, index=False)
+          EOF
+
+      - name: Commit and Push XLSX to Repo
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add data.xlsx
+          git commit -m "Add converted XLSX file"
+          git push
