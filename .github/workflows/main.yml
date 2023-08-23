@@ -1,15 +1,9 @@
-name: Convert CSV to XLSX and Push
+name: Convert CSV to XLSX and Send Email
 
-on:
-  push:
-    branches:
-      - main 
-permissions:
-  pull-requests: write
-  issues: write
-  repository-projects: write
+on: [push]
+
 jobs:
-  convert_and_push:
+  convert_and_email:
     runs-on: ubuntu-latest
 
     steps:
@@ -43,11 +37,9 @@ jobs:
           data.to_excel(xlsx_file, index=False)
           EOF
 
-      - name: Commit and Push XLSX to Repo
+      - name: Install mailx
+        run: sudo apt-get update && sudo apt-get install -y mailutils
+
+      - name: Send Email with XLSX Attachment
         run: |
-          git config --global user.email "igwejude@github.com"
-          git config --global user.name "Jude Igwe"
-          git pull
-          git add data.xlsx
-          git commit -m "Add converted XLSX file"
-          git push
+          echo "Please find the attached XLSX file." | mailx -s "Converted XLSX File" -a "data.xlsx" igwejude@gmail.com
