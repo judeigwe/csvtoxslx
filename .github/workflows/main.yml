@@ -42,4 +42,5 @@ jobs:
 
       - name: Send Email with XLSX Attachment
         run: |
+          ls 
           echo "Please find the attached XLSX file." | mailx -s "Converted XLSX File" -a "data.xlsx" igwejude@gmail.com
